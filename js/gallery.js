@@ -1,1 +1,18 @@
-(()=>{const root=document.querySelector('[data-gallery]');if(!root||!window.paintingsData)return;const limit=Number(root.dataset.limit)||Infinity;const media=painting=>painting.image?`<img class="painting-image" data-src="${painting.image}" alt="${painting.title}" loading="lazy" decoding="async">`:'<div class="paint-figure" aria-hidden="true"></div>';const makeCard=painting=>`<article class="painting-card reveal ${painting.wide?'is-wide':''}"><a class="painting-link" href="artwork.html?id=${encodeURIComponent(painting.slug)}" aria-label="View ${painting.title}"><div class="painting-canvas ${painting.paintClass} ratio-${painting.widthCm}x${painting.heightCm}">${media(painting)}<span class="canvas-badge">${painting.size}</span></div><div class="painting-info"><h2 class="painting-title">${painting.title}</h2><p class="painting-meta">${painting.medium} · ${painting.size}${painting.year?` · ${painting.year}`:''}</p><span class="painting-status ${painting.available?'':'is-sold'}">${painting.available?'Available':'Acquired'}</span>${painting.available?'<ul class="painting-benefits" aria-label="Purchase terms"><li>Worldwide free delivery</li><li>7-day returns accepted</li></ul>':''}</div></a></article>`;const render=filter=>{let items=window.paintingsData.filter(p=>filter==='all'||p.category===filter||(filter==='sold'&&!p.available)).slice(0,limit);root.innerHTML=items.length?items.map(makeCard).join(''):'<p class="empty-state">No works match this filter.</p>';window.dispatchEvent(new CustomEvent('gallery:rendered'))};document.querySelectorAll('[data-filter]').forEach(button=>button.addEventListener('click',()=>{document.querySelectorAll('[data-filter]').forEach(item=>item.setAttribute('aria-pressed','false'));button.setAttribute('aria-pressed','true');render(button.dataset.filter)}));render('all')})();
+(() => {
+  const root = document.querySelector('[data-gallery]');
+  if (!root) return;
+  const staticCards = [...root.querySelectorAll('.painting-card')];
+  const buttons = document.querySelectorAll('[data-filter]');
+  const applyFilter = filter => {
+    staticCards.forEach(card => {
+      const show = filter === 'all' || card.dataset.category === filter || (filter === 'sold' && card.dataset.available === 'false');
+      card.hidden = !show;
+    });
+  };
+  buttons.forEach(button => button.addEventListener('click', () => {
+    buttons.forEach(item => item.setAttribute('aria-pressed', 'false'));
+    button.setAttribute('aria-pressed', 'true');
+    applyFilter(button.dataset.filter);
+  }));
+  applyFilter('all');
+})();

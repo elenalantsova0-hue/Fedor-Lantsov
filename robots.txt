@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://elenalantsova0-hue.github.io/Fedor-Lantsov/sitemap.xml
