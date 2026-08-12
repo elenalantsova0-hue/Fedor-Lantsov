@@ -11,7 +11,7 @@ from urllib.parse import quote
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
-BASE_URL = "https://elenalantsova0-hue.github.io/Fedor-Lantsov"
+BASE_URL = "https://fedorlantsov.com"
 SITE_NAME = "Fedor Lantsov"
 DATA_FILE = ROOT / "js" / "data" / "paintings.js"
 CSS_FILES = [
@@ -501,6 +501,7 @@ def generate_support_files(items: list[dict]) -> None:
     sitemap.append("</urlset>")
     (ROOT / "sitemap.xml").write_text("\n".join(sitemap) + "\n", encoding="utf-8")
     (ROOT / "robots.txt").write_text(f"User-agent: *\nAllow: /\n\nSitemap: {BASE_URL}/sitemap.xml\n", encoding="utf-8")
+    (ROOT / "CNAME").write_text("fedorlantsov.com\n", encoding="utf-8")
     manifest = {
         "name": "Fedor Lantsov Fine Art", "short_name": "Fedor Lantsov", "start_url": "./",
         "display": "standalone", "background_color": "#0a0907", "theme_color": "#0a0907",
